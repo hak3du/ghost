@@ -63,9 +63,6 @@
         .fade-in-up-delay-1{animation-delay:.2s;opacity:0}
         .fade-in-up-delay-2{animation-delay:.4s;opacity:0}
 
-        .scroll-film-section{height:500vh;position:relative}
-        .scroll-film-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
-
         .gallery-item img{transition:transform .8s cubic-bezier(.25,.46,.45,.94),filter .8s ease}
         .gallery-item:hover img{transform:scale(1.05);filter:brightness(1.1)}
 
@@ -129,15 +126,11 @@
         @keyframes waPulse{0%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0.3)}70%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 10px rgba(37,211,102,0)}100%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0)}}
         .whatsapp-float{animation:waPulse 2.5s infinite}
 
-        /* ===== SCROLL GIF PLAYER ===== */
-        .scroll-gif-canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:auto;transition:opacity .3s ease}
-        .gif-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s ease}
-        .gif-loading.visible{opacity:1}
-        .gif-loading .spinner{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-top-color:rgba(255,255,255,0.6);border-radius:50%;animation:spin .8s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .gif-film-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px 128px;mix-blend-mode:overlay}
-        .gif-scanlines{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0.03;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 2px,rgba(0,0,0,0.3) 2px,rgba(0,0,0,0.3) 4px)}
-        .gif-vignette{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.4) 100%)}
+        /* Scroll video sections */
+        .scroll-video{width:100%;height:100vh;object-fit:cover;display:block}
+        .video-film-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px 128px;mix-blend-mode:overlay}
+        .video-scanlines{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0.03;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 2px,rgba(0,0,0,0.3) 2px,rgba(0,0,0,0.3) 4px)}
+        .video-vignette{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.4) 100%)}
 
         @media(max-width:768px){.desktop-nav{display:none!important}.mobile-btn{display:flex!important}}
         @media(min-width:769px){.mobile-btn{display:none!important}}
@@ -215,38 +208,24 @@
     </section>
 
     <!-- ============================================================
-         ★ SCROLL GIF 1 — STORY TRANSITION
-         ★ TO SWAP: change the data-src to your own GIF URL
-         ★ The GIF advances frame-by-frame as you scroll through
-         ★ this 400vh tall section (300vh of scroll travel).
+         ★ SCROLL VIDEO 1 — STORY TRANSITION
+         ★ Place ghost-drift.mp4 in the same folder as this HTML file
+         ★ Or swap src to any direct .mp4 URL
          ============================================================ -->
-    <section id="storyTransition" class="relative" style="height: 400vh;">
-        <div class="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
-            <!-- Hero overlay that fades out as you scroll -->
+    <section id="storyTransition" style="height: 300vh;">
+        <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
             <div id="heroOverlay" class="absolute inset-0 z-10 transition-opacity duration-100" style="opacity:1">
                 <img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="" class="w-full h-full object-cover opacity-60">
                 <div class="absolute inset-0 bg-brand-black/50"></div>
             </div>
 
-            <!-- Loading spinner (hides once GIF is ready) -->
-            <div id="storyLoading" class="gif-loading visible"><div class="spinner"></div></div>
+            <!-- ★ SWAP THIS src ★ -->
+            <video id="storyVideo" class="scroll-video" style="opacity:0;transition:opacity .4s ease" src="ghost-drift.mp4" muted playsinline preload="auto"></video>
 
-            <!-- ★★★ SWAP THIS data-src WITH YOUR GIF URL ★★★ -->
-            <img
-                id="storyGif"
-                class="scroll-gif-canvas"
-                style="opacity:0"
-                data-src="ghost-film.gif"
-                alt=""
-                draggable="false"
-            >
-
-            <!-- Cinematic overlays -->
-            <div class="gif-film-grain"></div>
-            <div class="gif-scanlines"></div>
-            <div class="gif-vignette"></div>
-
-            <div id="frameCounter" class="frame-counter absolute bottom-5 right-5 z-20 font-mono text-white/20 tracking-widest">000 / 060</div>
+            <div class="video-film-grain"></div>
+            <div class="video-scanlines"></div>
+            <div class="video-vignette"></div>
+            <div id="frameCounter" class="frame-counter absolute bottom-5 right-5 z-20 font-mono text-white/20 tracking-widest">00:00 / 00:00</div>
             <div id="sceneText" class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
                 <p class="scene-text font-serif text-white/0 transition-all duration-500" id="sceneTextInner"></p>
             </div>
@@ -281,32 +260,20 @@
     </section>
 
     <!-- ============================================================
-         ★ SCROLL GIF 2 — SCROLL FILM
-         ★ TO SWAP: change the data-src to your own GIF URL
-         ★ The GIF advances frame-by-frame as you scroll through
-         ★ this 500vh tall section (400vh of scroll travel).
+         ★ SCROLL VIDEO 2 — SCROLL FILM
+         ★ Place ghost-film.mp4 in the same folder as this HTML file
+         ★ Or swap src to any direct .mp4 URL
          ============================================================ -->
-    <section id="scrollFilm" class="relative scroll-film-section">
-        <div class="scroll-film-sticky">
-            <!-- Loading spinner (hides once GIF is ready) -->
-            <div id="filmLoading" class="gif-loading visible"><div class="spinner"></div></div>
+    <section id="scrollFilm" style="height: 500vh;">
+        <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
 
-            <!-- ★★★ SWAP THIS data-src WITH YOUR GIF URL ★★★ -->
-            <img
-                id="filmGif"
-                class="scroll-gif-canvas"
-                style="opacity:1"
-                data-src="ghost-transition.gif"
-                alt=""
-                draggable="false"
-            >
+            <!-- ★ SWAP THIS src ★ -->
+            <video id="filmVideo" class="scroll-video" src="ghost-film.mp4" muted playsinline preload="auto"></video>
 
-            <!-- Cinematic overlays -->
-            <div class="gif-film-grain"></div>
-            <div class="gif-scanlines"></div>
+            <div class="video-film-grain"></div>
+            <div class="video-scanlines"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 pointer-events-none z-10"></div>
-            <div class="gif-vignette"></div>
-
+            <div class="video-vignette"></div>
             <div id="filmSceneLabel" class="absolute bottom-7 left-5 z-20" data-parallax-speed="0.03" style="will-change:transform">
                 <p class="film-label-step font-bold uppercase tracking-[.2em] text-brand-orange mb-1" id="filmSceneStep">Scene 01</p>
                 <p class="film-label-title font-serif text-white/90 transition-all duration-300" id="filmSceneTitle">Ignition</p>
@@ -378,7 +345,6 @@
         </div>
     </section>
 
-    <!-- Gallery Modal -->
     <div id="galleryModal" class="gallery-modal fixed inset-0 z-[100] bg-brand-black/95 backdrop-blur-xl flex items-center justify-center opacity-0 pointer-events-none">
         <button onclick="closeGallery()" class="absolute top-3 right-3 md:top-6 md:right-6 text-white/50 hover:text-white transition-colors z-10"><i data-lucide="x" class="w-6 h-6"></i></button>
         <button onclick="prevGallery()" class="absolute left-2 md:left-6 text-white/30 hover:text-white transition-colors z-10"><i data-lucide="chevron-left" class="w-7 h-7"></i></button>
@@ -429,7 +395,6 @@
         </div>
     </footer>
 
-    <!-- Reel Modal -->
     <div id="reelModal" class="gallery-modal fixed inset-0 z-[100] bg-brand-black flex items-center justify-center opacity-0 pointer-events-none">
         <button onclick="closeReel()" class="absolute top-3 right-3 text-white/50 hover:text-white transition-colors z-10"><i data-lucide="x" class="w-6 h-6"></i></button>
         <div class="text-center"><div class="w-16 h-16 rounded-full border border-brand-orange/30 flex items-center justify-center mx-auto mb-5"><i data-lucide="play" class="w-7 h-7 text-brand-orange ml-0.5"></i></div><p class="fluid-h2 font-serif text-white mb-2">Ghost — The Reel</p><p class="fluid-small text-slate-500">Video reel coming soon</p></div>
@@ -439,344 +404,94 @@
         lucide.createIcons();
 
         /* ================================================================
-           SCROLL-DRIVEN GIF PLAYER CLASS
+           SCROLL-DRIVEN VIDEO SECTIONS
            ----------------------------------------------------------------
-           Loads a GIF into a hidden canvas, extracts individual frames,
-           then renders frames on a visible canvas based on scroll position
-           through the parent sticky section.
-           
-           Usage:
-             new ScrollGifPlayer({
-               sectionEl:   HTMLElement,   // the tall scroll section
-               imgEl:       HTMLElement,   // the <img> with data-src
-               loadingEl:   HTMLElement,   // loading spinner
-               totalFrames: 60,            // default frame count estimate
-               fps:         10,            // playback speed reference
-               onStart:     fn(progress),  // fires once when scroll begins
-               onUpdate:    fn(progress),  // fires every scroll tick
-               onEnd:       fn(progress),  // fires once at end
-             });
-           ================================================================ */
-        class ScrollGifPlayer {
-            constructor(opts) {
-                this.section   = opts.sectionEl;
-                this.imgEl     = opts.imgEl;
-                this.loadingEl = opts.loadingEl;
-                this.totalFrames = opts.totalFrames || 60;
-                this.fps         = opts.fps || 10;
-                this.onStart     = opts.onStart || null;
-                this.onUpdate    = opts.onUpdate || null;
-                this.onEnd       = opts.onEnd || null;
-
-                this.frames     = [];
-                this.ready      = false;
-                this.started    = false;
-                this.ended      = false;
-                this.lastFrame  = -1;
-
-                this._init();
-            }
-
-            async _init() {
-                // Create hidden source image
-                const srcImg = new Image();
-                srcImg.crossOrigin = 'anonymous';
-
-                try {
-                    await new Promise((resolve, reject) => {
-                        srcImg.onload  = resolve;
-                        srcImg.onerror = reject;
-                        srcImg.src = this.imgEl.dataset.src;
-                    });
-                } catch (e) {
-                    console.warn('ScrollGifPlayer: failed to load', this.imgEl.dataset.src, e);
-                    this.loadingEl.classList.remove('visible');
-                    return;
-                }
-
-                // Count actual frames by scanning for graphic control extension blocks
-                const realCount = this._countGifFrames(srcImg);
-                if (realCount > 0) this.totalFrames = realCount;
-
-                // Create offscreen canvas to extract frames
-                const offCanvas = document.createElement('canvas');
-                offCanvas.width  = srcImg.naturalWidth;
-                offCanvas.height = srcImg.naturalHeight;
-                const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
-
-                // Create visible canvas (replaces the <img>)
-                const visCanvas = document.createElement('canvas');
-                visCanvas.className = 'scroll-gif-canvas';
-                visCanvas.style.cssText = this.imgEl.style.cssText;
-                visCanvas.style.opacity = this.imgEl.style.opacity || '0';
-                visCanvas.width  = srcImg.naturalWidth;
-                visCanvas.height = srcImg.naturalHeight;
-                const visCtx = visCanvas.getContext('2d');
-
-                // Draw the loaded GIF onto offscreen canvas and extract each frame
-                offCtx.drawImage(srcImg, 0, 0);
-                const fullData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
-
-                // Find frame boundaries by scanning left-edge pixels for change
-                const w = offCanvas.width;
-                const h = offCanvas.height;
-                const d = fullData.data;
-                const frameIndices = [0]; // first frame always at 0
-
-                let prevR = d[0], prevG = d[1], prevB = d[2];
-
-                for (let y = 0; y < h; y++) {
-                    const i = (y * w) * 4;
-                    const r = d[i], g = d[i+1], b = d[i+2];
-
-                    // Detect significant color change on left edge
-                    if (Math.abs(r - prevR) + Math.abs(g - prevG) + Math.abs(b - prevB) > 30) {
-                        frameIndices.push(y);
-                        prevR = r; prevG = g; prevB = b;
-                    }
-                }
-
-                // Extract frames
-                for (let f = 0; f < frameIndices.length; f++) {
-                    const startY = frameIndices[f];
-                    const endY   = f < frameIndices.length - 1 ? frameIndices[f + 1] : h;
-                    const frameH = Math.max(1, endY - startY);
-
-                    const fCanvas = document.createElement('canvas');
-                    fCanvas.width  = w;
-                    fCanvas.height = frameH;
-                    const fCtx = fCanvas.getContext('2d');
-                    fCtx.drawImage(offCanvas, 0, startY, w, frameH, 0, 0, w, frameH);
-
-                    this.frames.push(fCanvas);
-                }
-
-                // Fallback: if scanning found only 1 frame, use the whole image
-                if (this.frames.length <= 1) {
-                    this.frames = [];
-                    const singleCanvas = document.createElement('canvas');
-                    singleCanvas.width  = w;
-                    singleCanvas.height = h;
-                    const sCtx = singleCanvas.getContext('2d');
-                    sCtx.drawImage(offCanvas, 0, 0);
-                    this.frames.push(singleCanvas);
-                    this.totalFrames = 1;
-                } else {
-                    this.totalFrames = this.frames.length;
-                }
-
-                // Draw first frame
-                visCtx.drawImage(this.frames[0], 0, 0);
-
-                // Swap the <img> with the visible canvas
-                this.imgEl.parentNode.replaceChild(visCanvas, this.imgEl);
-                this.canvas = visCanvas;
-                this.ctx    = visCtx;
-
-                // Ready — hide loading spinner
-                this.ready = true;
-                this.loadingEl.classList.remove('visible');
-            }
-
-            /* Rough GIF frame count from binary data */
-            _countGifFrames(img) {
-                try {
-                    const c = document.createElement('canvas');
-                    c.width = img.naturalWidth; c.height = img.naturalHeight;
-                    const ctx = c.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    const bytes = ctx.getImageData(0, 0, 1, 1).data; // minimal to get canvas tainted check
-                } catch(e) { /* cross-origin, skip counting */ }
-
-                try {
-                    const c2 = document.createElement('canvas');
-                    c2.width = 1; c2.height = 1;
-                    const ctx2 = c2.getContext('2d');
-                    ctx2.drawImage(img, 0, 0, 1, 1);
-                    // Can't easily get binary from cross-origin img, return 0 to use estimate
-                    return 0;
-                } catch(e) {
-                    return 0;
-                }
-            }
-
-            /* Call this on every scroll tick */
-            update(scrollY) {
-                if (!this.ready || !this.canvas) return;
-
-                const rect     = this.section.getBoundingClientRect();
-                const viewH    = window.innerHeight;
-                const scrollH  = this.section.offsetHeight - viewH;
-
-                // Progress: 0 at section top, 1 at section bottom
-                const rawProgress = Math.max(0, Math.min(1, -rect.top / scrollH));
-
-                // Map to frame index with eased stepping for smooth feel
-                const exactFrame = rawProgress * (this.totalFrames - 1);
-                const frameIndex = Math.round(exactFrame);
-                const clamped    = Math.max(0, Math.min(this.totalFrames - 1, frameIndex));
-
-                // Only redraw when the frame actually changes
-                if (clamped !== this.lastFrame) {
-                    this.lastFrame = clamped;
-                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.ctx.drawImage(this.frames[clamped], 0, 0, this.canvas.width, this.canvas.height);
-                }
-
-                // Lifecycle callbacks
-                if (rawProgress > 0.001 && !this.started) {
-                    this.started = true;
-                    if (this.onStart) this.onStart(rawProgress);
-                }
-                if (this.onUpdate) this.onUpdate(rawProgress);
-                if (rawProgress > 0.998 && !this.ended) {
-                    this.ended = true;
-                    if (this.onEnd) this.onEnd(rawProgress);
-                }
-            }
-        }
-
-        /* ================================================================
-           INITIALIZE SCROLL GIF PLAYERS
+           Pure and simple: video.currentTime = progress * duration
+           No frame extraction, no canvas, no GIF parsing.
            ================================================================ */
 
-        // --- Story Transition GIF ---
-        const storyGifPlayer = new ScrollGifPlayer({
-            sectionEl:   document.getElementById('storyTransition'),
-            imgEl:       document.getElementById('storyGif'),
-            loadingEl:   document.getElementById('storyLoading'),
-            totalFrames: 60,
-            fps:         10,
-            onStart(progress) {
-                // Fade in the GIF, fade out the hero overlay
-                storyGifPlayer.canvas.style.opacity = '1';
-            },
-            onUpdate(progress) {
-                // Fade out hero overlay in first 20% of scroll
-                const overlay = document.getElementById('heroOverlay');
-                overlay.style.opacity = Math.max(0, 1 - progress * 5).toFixed(3);
+        // --- Video 1: Story Transition ---
+        const storyVideo   = document.getElementById('storyVideo');
+        const storySection = document.getElementById('storyTransition');
+        let storyReady = false;
 
-                // Update frame counter
-                const currentFrame = Math.min(storyGifPlayer.totalFrames, Math.round(progress * storyGifPlayer.totalFrames));
-                const totalDisplay = String(storyGifPlayer.totalFrames).padStart(3, '0');
-                document.getElementById('frameCounter').textContent =
-                    String(currentFrame).padStart(3, '0') + ' / ' + totalDisplay;
+        storyVideo.addEventListener('loadedmetadata', () => { storyReady = true; });
 
-                // Scene text appears in middle 40%
-                const textEl = document.getElementById('sceneTextInner');
-                if (progress > 0.25 && progress < 0.65) {
-                    const textOpacity = Math.min(1, (progress - 0.25) / 0.08) * Math.min(1, (0.65 - progress) / 0.08);
-                    textEl.style.color = 'rgba(255,255,255,' + textOpacity.toFixed(3) + ')';
-                    textEl.textContent = 'Every revolution has a rhythm.';
-                } else {
-                    textEl.style.color = 'rgba(255,255,255,0)';
-                }
-            },
-            onEnd(progress) {
-                // Could trigger something at the end
-            }
-        });
+        // --- Video 2: Scroll Film ---
+        const filmVideo   = document.getElementById('filmVideo');
+        const filmSection = document.getElementById('scrollFilm');
+        let filmReady = false;
 
-        // --- Film GIF ---
+        filmVideo.addEventListener('loadedmetadata', () => { filmReady = true; });
+
+        // Film scene labels
         const filmScenes = [
-            { step: 'Scene 01', title: 'Ignition' },
-            { step: 'Scene 02', title: 'First Gear' },
-            { step: 'Scene 03', title: 'Sideways' },
-            { step: 'Scene 04', title: 'Smoke' },
-            { step: 'Scene 05', title: 'Control' },
+            { step:'Scene 01', title:'Ignition' },
+            { step:'Scene 02', title:'First Gear' },
+            { step:'Scene 03', title:'Sideways' },
+            { step:'Scene 04', title:'Smoke' },
+            { step:'Scene 05', title:'Control' },
         ];
 
-        const filmGifPlayer = new ScrollGifPlayer({
-            sectionEl:   document.getElementById('scrollFilm'),
-            imgEl:       document.getElementById('filmGif'),
-            loadingEl:   document.getElementById('filmLoading'),
-            totalFrames: 80,
-            fps:         12,
-            onStart(progress) {
-                // GIF is already visible (opacity:1), no need to fade in
-            },
-            onUpdate(progress) {
-                // Progress bar
-                document.getElementById('filmProgress').style.width = (progress * 100).toFixed(2) + '%';
-
-                // Scene labels change at thresholds
-                const sceneIndex = Math.min(filmScenes.length - 1, Math.floor(progress * filmScenes.length));
-                const scene = filmScenes[sceneIndex];
-                document.getElementById('filmSceneStep').textContent  = scene.step;
-                document.getElementById('filmSceneTitle').textContent = scene.title;
-            },
-            onEnd(progress) {}
-        });
-
+        // Helper: format seconds to MM:SS
+        function fmtTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+        }
 
         /* ================================================================
            HERO SLIDESHOW
            ================================================================ */
         const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.slide-dot');
-        let currentSlide = 0;
-        function advanceSlide() {
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-            void dots[currentSlide].offsetWidth;
-            dots[currentSlide].classList.add('active');
+        const dots   = document.querySelectorAll('.slide-dot');
+        let curSlide = 0;
+        function nextSlide() {
+            slides[curSlide].classList.remove('active');
+            dots[curSlide].classList.remove('active');
+            curSlide = (curSlide+1) % slides.length;
+            slides[curSlide].classList.add('active');
+            void dots[curSlide].offsetWidth;
+            dots[curSlide].classList.add('active');
         }
-        let slideTimer = setInterval(advanceSlide, 6000);
-        document.getElementById('hero').addEventListener('mouseenter', () => clearInterval(slideTimer));
-        document.getElementById('hero').addEventListener('mouseleave', () => { slideTimer = setInterval(advanceSlide, 6000); });
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                clearInterval(slideTimer);
-                slides[currentSlide].classList.remove('active');
-                dots[currentSlide].classList.remove('active');
-                currentSlide = parseInt(dot.dataset.index);
-                slides[currentSlide].classList.add('active');
-                void dots[currentSlide].offsetWidth;
-                dots[currentSlide].classList.add('active');
-                slideTimer = setInterval(advanceSlide, 6000);
-            });
-        });
+        let sTimer = setInterval(nextSlide, 6000);
+        document.getElementById('hero').addEventListener('mouseenter', () => clearInterval(sTimer));
+        document.getElementById('hero').addEventListener('mouseleave', () => { sTimer = setInterval(nextSlide, 6000); });
+        dots.forEach(d => d.addEventListener('click', () => {
+            clearInterval(sTimer);
+            slides[curSlide].classList.remove('active');
+            dots[curSlide].classList.remove('active');
+            curSlide = +d.dataset.index;
+            slides[curSlide].classList.add('active');
+            void dots[curSlide].offsetWidth;
+            dots[curSlide].classList.add('active');
+            sTimer = setInterval(nextSlide, 6000);
+        }));
 
         /* ================================================================
            MOBILE MENU
            ================================================================ */
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        let menuOpen = false;
-        mobileMenuBtn.addEventListener('click', () => {
-            menuOpen = !menuOpen;
-            mobileMenu.classList.toggle('open', menuOpen);
-            document.body.style.overflow = menuOpen ? 'hidden' : '';
+        const mBtn = document.getElementById('mobileMenuBtn');
+        const mMenu = document.getElementById('mobileMenu');
+        let mOpen = false;
+        mBtn.addEventListener('click', () => {
+            mOpen = !mOpen;
+            mMenu.classList.toggle('open', mOpen);
+            document.body.style.overflow = mOpen ? 'hidden' : '';
         });
-        document.querySelectorAll('.mobile-link').forEach(l => {
-            l.addEventListener('click', () => {
-                menuOpen = false;
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        });
+        document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+            mOpen = false; mMenu.classList.remove('open'); document.body.style.overflow = '';
+        }));
 
         /* ================================================================
-           NAV SCROLL STATE
+           MODALS & GALLERY
            ================================================================ */
         const nav = document.getElementById('mainNav');
+        document.getElementById('watchReelBtn').addEventListener('click', () =>
+            document.getElementById('reelModal').classList.add('active'));
+        function closeReel() { document.getElementById('reelModal').classList.remove('active'); }
 
-        /* ================================================================
-           REEL MODAL
-           ================================================================ */
-        document.getElementById('watchReelBtn').addEventListener('click', () => {
-            document.getElementById('reelModal').classList.add('active');
-        });
-        function closeReel() {
-            document.getElementById('reelModal').classList.remove('active');
-        }
-
-        /* ================================================================
-           GALLERY
-           ================================================================ */
-        const galleryImages = [
+        const gImgs = [
             'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800',
             'https://images.pexels.com/photos/97075/pexels-photo-97075.jpeg?auto=compress&cs=tinysrgb&w=1800',
             'https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=1800',
@@ -784,119 +499,123 @@
             'https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=1800',
             'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800',
         ];
-        let galleryIndex = 0;
-        function openGallery(i) {
-            galleryIndex = i;
-            document.getElementById('galleryModalImg').src = galleryImages[i];
-            document.getElementById('galleryModal').classList.add('active');
-        }
-        function closeGallery() {
-            document.getElementById('galleryModal').classList.remove('active');
-        }
-        function prevGallery() {
-            galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
-            document.getElementById('galleryModalImg').src = galleryImages[galleryIndex];
-        }
-        function nextGallery() {
-            galleryIndex = (galleryIndex + 1) % galleryImages.length;
-            document.getElementById('galleryModalImg').src = galleryImages[galleryIndex];
-        }
-        document.getElementById('galleryModal').addEventListener('click', function(e) {
-            if (e.target === this) closeGallery();
-        });
-        document.getElementById('reelModal').addEventListener('click', function(e) {
-            if (e.target === this) closeReel();
-        });
+        let gIdx = 0;
+        function openGallery(i)  { gIdx=i; document.getElementById('galleryModalImg').src=gImgs[i]; document.getElementById('galleryModal').classList.add('active'); }
+        function closeGallery()  { document.getElementById('galleryModal').classList.remove('active'); }
+        function prevGallery()   { gIdx=(gIdx-1+gImgs.length)%gImgs.length; document.getElementById('galleryModalImg').src=gImgs[gIdx]; }
+        function nextGallery()   { gIdx=(gIdx+1)%gImgs.length; document.getElementById('galleryModalImg').src=gImgs[gIdx]; }
+        document.getElementById('galleryModal').addEventListener('click', function(e){ if(e.target===this) closeGallery(); });
+        document.getElementById('reelModal').addEventListener('click', function(e){ if(e.target===this) closeReel(); });
 
         /* ================================================================
-           MERCH CLICK
+           MERCH & CONTACT
            ================================================================ */
         function merchClick(name) {
-            const msg = encodeURIComponent('Hey Ghost, I want to order: ' + name);
-            window.open('https://wa.me/27123456789?text=' + msg, '_blank');
+            window.open('https://wa.me/27123456789?text=' +
+                encodeURIComponent('Hey Ghost, I want to order: ' + name), '_blank');
         }
-
-        /* ================================================================
-           CONTACT FORM
-           ================================================================ */
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const msg = document.getElementById('formMessage');
-            msg.classList.remove('hidden');
-            msg.className = 'text-center fluid-small py-2.5 rounded-xl bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-            msg.textContent = 'Message sent! Ghost will get back to you shortly.';
+            const m = document.getElementById('formMessage');
+            m.classList.remove('hidden');
+            m.className = 'text-center fluid-small py-2.5 rounded-xl bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
+            m.textContent = 'Message sent! Ghost will get back to you shortly.';
             this.reset();
-            setTimeout(() => { msg.classList.add('hidden'); }, 4000);
+            setTimeout(() => m.classList.add('hidden'), 4000);
         });
 
         /* ================================================================
-           KEYBOARD SHORTCUTS
+           KEYBOARD
            ================================================================ */
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeGallery();
-                closeReel();
-                if (menuOpen) {
-                    menuOpen = false;
-                    mobileMenu.classList.remove('open');
-                    document.body.style.overflow = '';
-                }
-            }
+            if (e.key==='Escape') { closeGallery(); closeReel(); if(mOpen){mOpen=false;mMenu.classList.remove('open');document.body.style.overflow='';} }
             if (document.getElementById('galleryModal').classList.contains('active')) {
-                if (e.key === 'ArrowLeft')  prevGallery();
-                if (e.key === 'ArrowRight') nextGallery();
+                if (e.key==='ArrowLeft') prevGallery();
+                if (e.key==='ArrowRight') nextGallery();
             }
         });
 
         /* ================================================================
-           MAIN SCROLL HANDLER
+           MAIN SCROLL LOOP — drives everything
            ================================================================ */
         let ticking = false;
-
         function onScroll() {
             if (!ticking) {
                 requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
+                    const sy = window.scrollY;
 
-                    // --- Nav background ---
-                    if (scrollY > 80) {
-                        nav.classList.add('nav-scrolled');
-                    } else {
-                        nav.classList.remove('nav-scrolled');
-                    }
+                    // Nav
+                    nav.classList.toggle('nav-scrolled', sy > 80);
 
-                    // --- Hero parallax ---
-                    const heroBg    = document.getElementById('heroParallaxBg');
-                    const heroContent = document.getElementById('heroContent');
-                    if (heroBg)       heroBg.style.transform       = 'translateY(' + (scrollY * 0.25).toFixed(1) + 'px)';
-                    if (heroContent)  heroContent.style.transform   = 'translateY(' + (scrollY * 0.15).toFixed(1) + 'px)';
+                    // Hero parallax
+                    const hBg = document.getElementById('heroParallaxBg');
+                    const hCt = document.getElementById('heroContent');
+                    if (hBg) hBg.style.transform = 'translateY('+(sy*0.25).toFixed(1)+'px)';
+                    if (hCt) hCt.style.transform = 'translateY('+(sy*0.15).toFixed(1)+'px)';
 
-                    // --- Parallax orbs ---
+                    // Parallax orbs + elements
                     document.querySelectorAll('[data-parallax-speed]').forEach(el => {
-                        const rect = el.getBoundingClientRect();
-                        const centerY = rect.top + rect.height / 2;
-                        const offset = (centerY - window.innerHeight / 2) * parseFloat(el.dataset.parallaxSpeed);
-                        el.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+                        const r = el.getBoundingClientRect();
+                        const o = (r.top + r.height/2 - window.innerHeight/2) * parseFloat(el.dataset.parallaxSpeed);
+                        el.style.transform = 'translateY('+o.toFixed(1)+'px)';
                     });
-
-                    // --- About portrait parallax ---
-                    const portrait = document.getElementById('aboutPortrait');
-                    if (portrait) {
-                        const pRect = portrait.getBoundingClientRect();
-                        const pOff = (pRect.top - window.innerHeight / 2) * 0.06;
-                        portrait.style.transform = 'translateY(' + pOff.toFixed(1) + 'px)';
+                    const pt = document.getElementById('aboutPortrait');
+                    if (pt) {
+                        const pr = pt.getBoundingClientRect();
+                        pt.style.transform = 'translateY('+((pr.top-window.innerHeight/2)*0.06).toFixed(1)+'px)';
                     }
 
-                    // --- Scroll GIF players ---
-                    storyGifPlayer.update(scrollY);
-                    filmGifPlayer.update(scrollY);
+                    // ── SCROLL VIDEO 1: Story Transition ──
+                    if (storyReady) {
+                        const sTop    = storySection.offsetTop;
+                        const sHeight = storySection.offsetHeight - window.innerHeight;
+                        const sProg   = Math.max(0, Math.min(1, (sy - sTop) / sHeight));
 
-                    // --- Reveal-on-scroll sections ---
-                    document.querySelectorAll('.reveal-section').forEach(section => {
-                        const rect = section.getBoundingClientRect();
-                        if (rect.top < window.innerHeight * 0.88) {
-                            section.style.opacity = '1';
-                            section.style.transform = 'translateY(0)';
+                        // Fade in video, fade out hero overlay
+                        storyVideo.style.opacity = sProg > 0.01 ? '1' : '0';
+                        document.getElementById('heroOverlay').style.opacity = Math.max(0, 1 - sProg * 5).toFixed(3);
+
+                        // Set video time
+                        storyVideo.currentTime = sProg * storyVideo.duration;
+
+                        // Frame counter (shows current time / total time)
+                        document.getElementById('frameCounter').textContent =
+                            fmtTime(storyVideo.currentTime) + ' / ' + fmtTime(storyVideo.duration);
+
+                        // Scene text appears in middle 40%
+                        const txt = document.getElementById('sceneTextInner');
+                        if (sProg > 0.25 && sProg < 0.65) {
+                            const a = Math.min(1,(sProg-0.25)/0.08) * Math.min(1,(0.65-sProg)/0.08);
+                            txt.style.color = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+                            txt.textContent = 'Every revolution has a rhythm.';
+                        } else {
+                            txt.style.color = 'rgba(255,255,255,0)';
+                        }
+                    }
+
+                    // ── SCROLL VIDEO 2: Scroll Film ──
+                    if (filmReady) {
+                        const fTop    = filmSection.offsetTop;
+                        const fHeight = filmSection.offsetHeight - window.innerHeight;
+                        const fProg   = Math.max(0, Math.min(1, (sy - fTop) / fHeight));
+
+                        // Set video time
+                        filmVideo.currentTime = fProg * filmVideo.duration;
+
+                        // Progress bar
+                        document.getElementById('filmProgress').style.width = (fProg*100).toFixed(2)+'%';
+
+                        // Scene labels
+                        const si = Math.min(filmScenes.length-1, Math.floor(fProg*filmScenes.length));
+                        document.getElementById('filmSceneStep').textContent  = filmScenes[si].step;
+                        document.getElementById('filmSceneTitle').textContent = filmScenes[si].title;
+                    }
+
+                    // Reveal sections
+                    document.querySelectorAll('.reveal-section').forEach(s => {
+                        if (s.getBoundingClientRect().top < window.innerHeight * 0.88) {
+                            s.style.opacity = '1';
+                            s.style.transform = 'translateY(0)';
                         }
                     });
 
@@ -908,14 +627,12 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
 
-        // Initial state for reveal sections
-        document.querySelectorAll('.reveal-section').forEach(section => {
-            section.style.opacity   = '0';
-            section.style.transform = 'translateY(30px)';
-            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        // Init reveal sections
+        document.querySelectorAll('.reveal-section').forEach(s => {
+            s.style.opacity = '0';
+            s.style.transform = 'translateY(30px)';
+            s.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         });
-
-        // Fire once on load to catch already-visible sections
         onScroll();
     </script>
 </body>
