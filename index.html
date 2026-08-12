@@ -64,8 +64,10 @@
         .fade-in-up-delay-1{animation-delay:.2s;opacity:0}
         .fade-in-up-delay-2{animation-delay:.4s;opacity:0}
 
-        .scroll-film-section{height:500vh;position:relative}
-        .scroll-film-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+        /* Scroll-driven video sections */
+        .scroll-video-section{position:relative}
+        .scroll-video-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        .scroll-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 
         .gallery-item img{transition:transform .8s cubic-bezier(.25,.46,.45,.94),filter .8s ease}
         .gallery-item:hover img{transform:scale(1.05);filter:brightness(1.1)}
@@ -130,11 +132,10 @@
         @keyframes waPulse{0%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0.3)}70%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 10px rgba(37,211,102,0)}100%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0)}}
         .whatsapp-float{animation:waPulse 2.5s infinite}
 
-        /* Scroll video loading state */
-        .scroll-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-        .video-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s ease}
+        /* Loading state for scroll videos */
+        .video-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;opacity:0;transition:opacity .4s ease}
         .video-loading.visible{opacity:1}
-        .video-loading .spinner{width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-top-color:rgba(255,255,255,0.6);border-radius:50%;animation:spin .8s linear infinite}
+        .video-loading .spinner{width:28px;height:28px;border:2px solid rgba(255,255,255,0.1);border-top-color:rgba(194,94,40,0.7);border-radius:50%;animation:spin .8s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
 
         @media(max-width:768px){.desktop-nav{display:none!important}.mobile-btn{display:flex!important}}
@@ -171,10 +172,6 @@
             <a href="#merch" class="fluid-h3 font-serif text-white hover:text-brand-orange transition-colors mobile-link">Merch</a>
             <a href="#gallery" class="fluid-h3 font-serif text-white hover:text-brand-orange transition-colors mobile-link">Gallery</a>
             <a href="#contact" class="btn-primary bg-brand-orange text-white font-bold uppercase tracking-widest rounded-full hover:bg-brand-orange-hover transition-all inline-block mt-2 mobile-link">Book Ghost</a>
-            <a href="https://wa.me/27123456789?text=Hey%20Ghost%2C%20I%27d%20like%20to%20book%20you." target="_blank" rel="noopener" class="flex items-center gap-2 text-whatsapp mt-1 mobile-link">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                <span class="fluid-small font-semibold uppercase tracking-widest">WhatsApp</span>
-            </a>
         </div>
     </div>
 
@@ -214,28 +211,30 @@
 
     <!-- ============================================================
          ★ SCROLL VIDEO 1 — STORY TRANSITION
-         ★ Currently using a Pexels night traffic video
-         ★ TO SWAP: change the src below to your local file path
+         ★ HEIGHT = video seconds × 60vh of scroll travel
+         ★ 10s video = 600vh. Adjust to match YOUR video length.
+         ★ TO SWAP: change src to your local file path
          ★ Example: src="videos/ghost-transition.mp4"
          ============================================================ -->
-    <section id="storyTransition" class="relative" style="height: 400vh;">
-        <div class="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
-            <div id="heroOverlay" class="absolute inset-0 z-10 transition-opacity duration-100" style="opacity:1">
+    <section id="storyTransition" class="scroll-video-section" style="height: 600vh;">
+        <div class="scroll-video-sticky">
+            <!-- Image overlay that fades out as you scroll into the video -->
+            <div id="storyOverlay" class="absolute inset-0 z-10" style="opacity:1;transition:opacity 0.05s linear">
                 <img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="" class="w-full h-full object-cover opacity-60">
                 <div class="absolute inset-0 bg-brand-black/50"></div>
             </div>
 
-            <!-- Loading spinner -->
+            <!-- Loading spinner — hidden once video is ready -->
             <div id="storyLoading" class="video-loading visible"><div class="spinner"></div></div>
 
             <!-- ★★★ SWAP THIS SRC ★★★ -->
-            <video id="storyVideo" class="scroll-video" style="opacity:0;transition:opacity .3s" muted playsinline preload="auto">
-                <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_30fps.mp4#t=0.001" type="video/mp4">
+            <video id="storyVideo" class="scroll-video" style="opacity:0" muted playsinline preload="auto">
+                <source src="videos/ghost-transition.mp4" type="video/mp4">
             </video>
 
-            <div id="frameCounter" class="frame-counter absolute bottom-5 right-5 z-20 font-mono text-white/20 tracking-widest">000 / 060</div>
+            <div id="frameCounter" class="frame-counter absolute bottom-5 right-5 z-20 font-mono text-white/20 tracking-widest">000 / 300</div>
             <div id="sceneText" class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                <p class="scene-text font-serif text-white/0 transition-all duration-500" id="sceneTextInner"></p>
+                <p class="scene-text font-serif transition-all duration-500" id="sceneTextInner" style="color:rgba(255,255,255,0)"></p>
             </div>
         </div>
     </section>
@@ -269,27 +268,28 @@
 
     <!-- ============================================================
          ★ SCROLL VIDEO 2 — SCROLL FILM
-         ★ Currently using a Pexels cinematic night video
-         ★ TO SWAP: change the src below to your local file path
+         ★ HEIGHT = video seconds × 60vh of scroll travel
+         ★ 10s video = 600vh. Adjust to match YOUR video length.
+         ★ TO SWAP: change src to your local file path
          ★ Example: src="videos/ghost-film.mp4"
          ============================================================ -->
-    <section id="scrollFilm" class="relative scroll-film-section">
-        <div class="scroll-film-sticky">
+    <section id="scrollFilm" class="scroll-video-section" style="height: 600vh;">
+        <div class="scroll-video-sticky">
             <!-- Loading spinner -->
             <div id="filmLoading" class="video-loading visible"><div class="spinner"></div></div>
 
             <!-- ★★★ SWAP THIS SRC ★★★ -->
             <video id="filmVideo" class="scroll-video" muted playsinline preload="auto">
-                <source src="https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4#t=0.001" type="video/mp4">
+                <source src="videos/ghost-film.mp4" type="video/mp4">
             </video>
 
             <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 pointer-events-none z-10"></div>
-            <div id="filmSceneLabel" class="absolute bottom-7 left-5 z-20" data-parallax-speed="0.03" style="will-change:transform">
+            <div id="filmSceneLabel" class="absolute bottom-7 left-5 z-20">
                 <p class="film-label-step font-bold uppercase tracking-[.2em] text-brand-orange mb-1" id="filmSceneStep">Scene 01</p>
                 <p class="film-label-title font-serif text-white/90 transition-all duration-300" id="filmSceneTitle">Ignition</p>
             </div>
             <div class="absolute bottom-0 left-0 right-0 h-1 bg-white/5 z-20">
-                <div id="filmProgress" class="h-full bg-brand-orange transition-all duration-100" style="width:0%"></div>
+                <div id="filmProgress" class="h-full bg-brand-orange" style="width:0%;transition:width 0.05s linear"></div>
             </div>
         </div>
     </section>
@@ -303,12 +303,12 @@
                 <h2 class="fluid-h2 font-serif text-white">Services</h2>
             </div>
             <div class="services-grid reveal-section">
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default" data-parallax-speed="0.02"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="mic" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Event Appearances</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Live spinning at festivals, concerts, corporate events, and private functions.</p></div>
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default" data-parallax-speed="-0.015"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="megaphone" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Brand Promotions</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Authentic brand integration through motorsport culture.</p></div>
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default" data-parallax-speed="0.025"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="clapperboard" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Music Videos</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Cinematic stunt coordination and on-screen presence.</p></div>
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default" data-parallax-speed="-0.02"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="tv" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Shows</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Choreographed spinning shows for stage and arena.</p></div>
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default" data-parallax-speed="0.018"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="flame" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Drift Demonstrations</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Controlled drift exhibitions for automotive events.</p></div>
-                <div class="service-card bg-brand-dark rounded-2xl group cursor-default flex flex-col items-center justify-center text-center border-dashed" data-parallax-speed="-0.01"><i data-lucide="plus" class="w-5 h-5 text-slate-600 mb-2"></i><p class="fluid-caption text-slate-600">Something custom?<br><a href="#contact" class="text-brand-orange hover:underline">Let's talk.</a></p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="mic" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Event Appearances</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Live spinning at festivals, concerts, corporate events, and private functions.</p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="megaphone" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Brand Promotions</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Authentic brand integration through motorsport culture.</p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="clapperboard" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Music Videos</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Cinematic stunt coordination and on-screen presence.</p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="tv" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Shows</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Choreographed spinning shows for stage and arena.</p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default"><div class="w-9 h-9 rounded-full bg-brand-orange/10 flex items-center justify-center mb-3 group-hover:bg-brand-orange/20 transition-colors flex-shrink-0"><i data-lucide="flame" class="w-4 h-4 text-brand-orange"></i></div><h3 class="fluid-h3 font-serif text-white mb-1.5">Drift Demonstrations</h3><p class="fluid-caption text-slate-500 font-light leading-relaxed">Controlled drift exhibitions for automotive events.</p></div>
+                <div class="service-card bg-brand-dark rounded-2xl group cursor-default flex flex-col items-center justify-center text-center border-dashed"><i data-lucide="plus" class="w-5 h-5 text-slate-600 mb-2"></i><p class="fluid-caption text-slate-600">Something custom?<br><a href="#contact" class="text-brand-orange hover:underline">Let's talk.</a></p></div>
             </div>
         </div>
     </section>
@@ -345,12 +345,12 @@
                 <h2 class="fluid-h2 font-serif text-white">Gallery</h2>
             </div>
             <div class="gallery-grid reveal-section">
-                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(0)"><img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover" data-parallax-speed="0.04"></div>
-                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(1)"><img src="https://images.pexels.com/photos/97075/pexels-photo-97075.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover" data-parallax-speed="-0.03"></div>
-                <div class="gallery-item wide overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:21/9" onclick="openGallery(2)"><img src="https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" class="w-full h-full object-cover" data-parallax-speed="0.05"></div>
-                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(3)"><img src="https://images.pexels.com/photos/210024/pexels-photo-210024.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover" data-parallax-speed="-0.035"></div>
-                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(4)"><img src="https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover" data-parallax-speed="0.03"></div>
-                <div class="gallery-item wide overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:21/9" onclick="openGallery(5)"><img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" class="w-full h-full object-cover" data-parallax-speed="-0.04"></div>
+                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(0)"><img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover"></div>
+                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(1)"><img src="https://images.pexels.com/photos/97075/pexels-photo-97075.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover"></div>
+                <div class="gallery-item wide overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:21/9" onclick="openGallery(2)"><img src="https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" class="w-full h-full object-cover"></div>
+                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(3)"><img src="https://images.pexels.com/photos/210024/pexels-photo-210024.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover"></div>
+                <div class="gallery-item overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:4/3" onclick="openGallery(4)"><img src="https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="" class="w-full h-full object-cover"></div>
+                <div class="gallery-item wide overflow-hidden rounded-sm cursor-pointer" style="aspect-ratio:21/9" onclick="openGallery(5)"><img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="" class="w-full h-full object-cover"></div>
             </div>
         </div>
     </section>
@@ -368,7 +368,7 @@
         <div class="parallax-orb w-[400px] h-[400px] bg-brand-orange/[0.03]" style="bottom:0;left:-5%" data-parallax-speed="0.1"></div>
         <div class="max-w-[1400px] mx-auto fluid-pad-x">
             <div class="contact-grid reveal-section">
-                <div data-parallax-speed="-0.03" style="will-change:transform">
+                <div>
                     <p class="fluid-caption font-bold uppercase tracking-[.2em] text-brand-orange mb-3">Get In Touch</p>
                     <h2 class="fluid-h2 font-serif text-white leading-tight mb-5">Book Ghost.</h2>
                     <p class="fluid-body text-slate-400 font-light leading-relaxed mb-6">Whether it's a stadium show, a brand activation, or a music video — reach out.</p>
@@ -381,36 +381,33 @@
                         <a href="#" class="social-icon rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-orange/20 border border-transparent hover:border-brand-orange/30 transition-all"><i data-lucide="instagram" class="w-3 h-3 text-slate-400"></i></a>
                         <a href="#" class="social-icon rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-orange/20 border border-transparent hover:border-brand-orange/30 transition-all"><i data-lucide="youtube" class="w-3 h-3 text-slate-400"></i></a>
                         <a href="https://wa.me/27123456789" target="_blank" rel="noopener" class="social-icon rounded-full bg-whatsapp/10 flex items-center justify-center hover:bg-whatsapp/20 border border-transparent hover:border-whatsapp/30 transition-all"><svg class="w-3 h-3 text-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-                    </div>
-                </div>
-                <div data-parallax-speed="0.03" style="will-change:transform">
-                    <form id="contactForm" class="space-y-3">
-                        <div><label class="block fluid-caption font-bold uppercase tracking-widest text-slate-500 mb-1.5">Name</label><input type="text" placeholder="Your name" class="form-input w-full bg-brand-dark border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-brand-orange/50 transition-colors"></div>
-                        <div><label class="block fluid-caption font-bold uppercase tracking-widest text-slate-500 mb-1.5">Email</label><input type="email" placeholder="your@email.com" class="form-input w-full bg-brand-dark border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-brand-orange/50 transition-colors"></div>
-                        <div><label class="block fluid-caption font-bold uppercase tracking-widest text-slate-500 mb-1.5">Event Type</label><select class="form-input w-full bg-brand-dark border border-white/10 rounded-xl text-slate-400 focus:outline-none focus:border-brand-orange/50 transition-colors appearance-none cursor-pointer"><option value="">Select type</option><option>Event Appearance</option><option>Brand Promotion</option><option>Music Video</option><option>Show</option><option>Drift Demonstration</option><option>Merch Order</option></select></div>
-                        <div><label class="block fluid-caption font-bold uppercase tracking-widest text-slate-500 mb-1.5">Message</label><textarea rows="3" placeholder="Tell Ghost about your event..." class="form-input w-full bg-brand-dark border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-brand-orange/50 transition-colors resize-none"></textarea></div>
-                        <button type="submit" class="btn-primary w-full bg-brand-orange text-white font-bold uppercase tracking-widest rounded-full hover:bg-brand-orange-hover hover:scale-[1.02] transition-all duration-150">Send Message</button>
-                        <div id="formMessage" class="hidden text-center fluid-small py-2.5 rounded-xl"></div>
-                    </form>
-                    <div class="mt-3 text-center"><span class="fluid-caption text-slate-600">or</span><a href="https://wa.me/27123456789?text=Hey%20Ghost%2C%20I%27d%20like%20to%20book%20you." target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 fluid-small font-semibold text-whatsapp hover:underline ml-1.5"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Book via WhatsApp</a></div>
-                </div>
+                    counter" class="frame-counter absolute bottom-5 right-5 z-20 font-mono text-white/20 tracking-widest">000 / 300</div>
+            <div id="sceneText" class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                <p class="scene-text font-serif transition-all duration-500" id="sceneTextInner" style="color:rgba(255,255,255,0)"></p>
             </div>
         </div>
     </section>
 
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="relative fluid-pad-y overflow-hidden">
+        <div class="parallax-orb w-[400px] h-[300px] bg-brand-orange/[0.03]" style="bottom:0;left:-5%" data-parallax-speed="0.1"></div>
+        section>
+        <div class="scroll-video-sticky">
+            <div id="filmLoading" class="video-loading visible"><div class="spinner"></div></div>
+            <video id="filmVideo" class="scroll-video" muted playsinline preload="auto">
+                <source src="videos/ghost-film.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 pointer-events-none z-10"></div>
+            <div id="filmSceneLabel" class="absolute bottom-7 left-5 z-20">
+                <p class="film-label-step font-bold uppercase tracking-[.2em] text-brand-orange mb-1" id="filmSceneStep">Scene 0
+
     <footer class="border-t border-white/5" style="padding:clamp(1.25rem,2.5vw,3rem) 0">
         <div class="max-w-[1400px] mx-auto fluid-pad-x footer-inner">
             <p class="font-serif text-white" style="font-size:clamp(0.9rem,1.3vw,1.25rem)">Ghost</p>
-            <p class="fluid-caption text-slate-600">© 2025 Ghost Spinning. All rights reserved.</p>
-            <div class="flex gap-4"><a href="#" class="fluid-caption text-slate-600 hover:text-white transition-colors">Privacy</a><a href="#" class="fluid-caption text-slate-600 hover:text-white transition-colors">Terms</a></div>
+            <p class="fluid-caption text-slate-600">© 2026 Ghost Spinning. All rights reserved.</p>
+            <div class="flex gap-4"><a href="#" class="fluid-caption text-slate-600 hover:text-white transition-colors">Privacy</a><a href="#" class="fluid-caption text-slate-600 hover:white transition-colors">Terms</a></div>
         </div>
     </footer>
-
-    <!-- Reel Modal -->
-    <div id="reelModal" class="gallery-modal fixed inset-0 z-[100] bg-brand-black flex items-center justify-center opacity-0 pointer-events-none">
-        <button onclick="closeReel()" class="absolute top-3 right-3 text-white/50 hover:text-white transition-colors z-10"><i data-lucide="x" class="w-6 h-6"></i></button>
-        <div class="text-center"><div class="w-16 h-16 rounded-full border border-brand-orange/30 flex items-center justify-center mx-auto mb-5"><i data-lucide="play" class="w-7 h-7 text-brand-orange ml-0.5"></i></div><p class="fluid-h2 font-serif text-white mb-2">Ghost — The Reel</p><p class="fluid-small text-slate-500">Video reel coming soon</p></div>
-    </div>
 
     <script>
         lucide.createIcons();
@@ -423,7 +420,7 @@
             slides[currentSlide].classList.remove('active');
             dots[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
+            drops[currentSlide].classList.add('active');
             void dots[currentSlide].offsetWidth;
             dots[currentSlide].classList.add('active');
         }
@@ -442,115 +439,243 @@
         const nav = document.getElementById('mainNav');
         document.getElementById('watchReelBtn').addEventListener('click', () => document.getElementById('reelModal').classList.add('active'));
         function closeReel() { document.getElementById('reelModal').classList.remove('active'); }
+        document.getElementById('reelModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReel(); });
 
-        // ===== BOTH FLAGS SET TO TRUE — USING REAL VIDEOS =====
-        const USE_REAL_VIDEO_1 = true;
-        const USE_REAL_VIDEO_2 = true;
+        // ===== NAV SCROLL =====
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('nav-scrolled', window.scrollY > 80);
+        }, { passive: true });
 
         // ===== PARALLAX =====
-        const parallaxElements = document.querySelectorAll('[data-parallax-speed]');
-        const heroParallaxBg = document.getElementById('heroParallaxBg');
-        const heroContent = document.getElementById('heroContent');
-        function updateParallax(sy, wh) {
-            if (heroParallaxBg) heroParallaxBg.style.transform = `translateY(${sy * 0.4}px)`;
-            if (heroContent && sy < wh) { heroContent.style.transform = `translateY(${sy * 0.2}px)`; heroContent.style.opacity = Math.max(0, 1 - sy / (wh * 0.8)); }
-            parallaxElements.forEach(el => { const r = el.getBoundingClientRect(); const sp = parseFloat(el.dataset.parallaxSpeed) || 0; if (r.bottom > -200 && r.top < wh + 200) el.style.transform = `translateY(${(r.top - wh / 2) * sp}px)`; });
+        const parallaxEls = document.querySelectorAll('[data-parallax-speed]');
+        function updateParallax() {
+            const sy = window.scrollY;
+            parallaxEls.forEach(el => {
+                const speed = parseFloat(el.dataset.parallaxSpeed);
+                el.style.transform = `translateY(${sy * speed}px)`;
+            });
         }
-
-        // ===== VIDEO REFERENCES =====
-        const storyVideo = document.getElementById('storyVideo');
-        const storyLoading = document.getElementById('storyLoading');
-        const filmVideo = document.getElementById('filmVideo');
-        const filmLoading = document.getElementById('filmLoading');
-        const heroOverlay = document.getElementById('heroOverlay');
-        const frameCounter = document.getElementById('frameCounter');
-        const sceneTextInner = document.getElementById('sceneTextInner');
-        const TSF = 60;
-        const storyScenes = [{s:0,e:12,t:""},{s:12,e:25,t:"The street wakes up."},{s:25,e:40,t:"The Gusheshe breathes."},{s:40,e:50,t:"Smoke fills the air."},{s:50,e:60,t:"Ghost takes control."}];
-
-        // Hide loading spinner when video has data
-        storyVideo.addEventListener('loadeddata', () => storyLoading.classList.remove('visible'));
-        filmVideo.addEventListener('loadeddata', () => filmLoading.classList.remove('visible'));
-
-        const filmSceneStep = document.getElementById('filmSceneStep');
-        const filmSceneTitle = document.getElementById('filmSceneTitle');
-        const filmProgress = document.getElementById('filmProgress');
-        const filmScenes = [{s:0,e:.15,st:"Scene 01",ti:"Ignition"},{s:.15,e:.3,st:"Scene 02",ti:"The Car Rolls"},{s:.3,e:.5,st:"Scene 03",ti:"Smoke Builds"},{s:.5,e:.72,st:"Scene 04",ti:"Handbrake"},{s:.72,e:1,st:"Scene 05",ti:"Crowd Cheers"}];
-
-        // ===== SCROLL HANDLER =====
-        let ticking = false;
-        function onScroll() { if (!ticking) { requestAnimationFrame(() => { handleScroll(); ticking = false; }); ticking = true; } }
-        window.addEventListener('scroll', onScroll, { passive: true });
-
-        function handleScroll() {
-            const sy = window.scrollY, wh = window.innerHeight;
-            updateParallax(sy, wh);
-            if (sy > 80) nav.classList.add('nav-scrolled'); else nav.classList.remove('nav-scrolled');
-
-            // ===== SCROLL VIDEO 1 =====
-            const sR = storySection.getBoundingClientRect();
-            const sSH = storySection.offsetHeight - wh;
-            const sP = Math.max(0, Math.min(1, -sR.top / sSH));
-            heroOverlay.style.opacity = Math.max(0, 1 - sP * 4);
-
-            if (storyVideo && storyVideo.duration && storyVideo.readyState >= 2) {
-                storyVideo.style.opacity = sP > 0.05 ? Math.min(1, sP * 5) : 0;
-                storyVideo.currentTime = sP * storyVideo.duration;
-            }
-
-            // Frame counter & scene text
-            const frame = Math.floor(sP * TSF);
-            frameCounter.textContent = String(frame).padStart(3, '0') + ' / ' + String(TSF).padStart(3, '0');
-            const css = storyScenes.find(s => sP >= s.s / TSF && sP < s.e / TSF);
-            if (css && css.t) {
-                sceneTextInner.textContent = css.t;
-                const tp = (sP - css.s / TSF) / ((css.e - css.s) / TSF);
-                const ta = tp < .2 ? tp / .2 : tp > .8 ? (1 - tp) / .2 : 1;
-                sceneTextInner.style.color = `rgba(255,255,255,${Math.max(0, ta * 0.9)})`;
-            } else { sceneTextInner.style.color = 'rgba(255,255,255,0)'; }
-
-            // ===== SCROLL VIDEO 2 =====
-            const fR = filmSection.getBoundingClientRect();
-            const fSH = filmSection.offsetHeight - wh;
-            const fP = Math.max(0, Math.min(1, -fR.top / fSH));
-
-            if (filmVideo && filmVideo.duration && filmVideo.readyState >= 2) {
-                filmVideo.currentTime = fP * filmVideo.duration;
-            }
-
-            // Scene labels
-            const fcs = filmScenes.find(s => fP >= s.s && fP < s.e) || filmScenes[4];
-            filmSceneStep.textContent = fcs.st;
-            filmSceneTitle.textContent = fcs.ti;
-            filmProgress.style.width = (fP * 100) + '%';
-        }
-        handleScroll();
+        window.addEventListener('scroll', updateParallax, { passive: true });
 
         // ===== GALLERY =====
         const galleryImages = [
             'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800',
             'https://images.pexels.com/photos/97075/pexels-photo-97075.jpeg?auto=compress&cs=tinysrgb&w=1800',
-            'https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=1800',
-            'https://images.pexels.com/photos/210024/pexels-photo-210024.jpeg?auto=compress&cs=tinysrgb&w=1800',
-            'https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=1800',
-            'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1800'
+            'https placeholder url 3',
+            'https://placeholder url 4',
+            'https://placeholder url 5',
+            'https://placeholder url 6'
         ];
-        let currentGalleryIndex = 0;
-        function openGallery(i) { currentGalleryIndex = i; document.getElementById('galleryModalImg').src = galleryImages[i]; document.getElementById('galleryModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        let galleryIndex = 0;
+        function openGallery(i) { galleryIndex = i; document.getElementById('galleryModalImg').src = galleryImages[i]; document.getElementById('galleryModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeGallery() { document.getElementById('galleryModal').classList.remove('active'); document.body.style.overflow = ''; }
-        function nextGallery() { currentGalleryIndex = (currentGalleryIndex + 1) % galleryImages.length; document.getElementById('galleryModalImg').src = galleryImages[currentGalleryIndex]; }
-        function prevGallery() { currentGalleryIndex = (currentGalleryIndex - 1 + galleryImages.length) % galleryImages.length; document.getElementById('galleryModalImg').src = galleryImages[currentGalleryIndex]; }
-        document.addEventListener('keydown', e => { if (!document.getElementById('galleryModal').classList.contains('active')) return; if (e.key === 'Escape') closeGallery(); if (e.key === 'ArrowRight') nextGallery(); if (e.key === 'ArrowLeft') prevGallery(); });
+        function prevGallery() { galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length; document.getElementById('galleryModalImg').src = galleryImages[galleryIndex]; }
+        function nextGallery() { galleryIndex = (galleryIndex + 1) % galleryImages.length; document.getElementById('galleryModalImg').src = galleryImages[galleryIndex]; }
+        document.getElementById('galleryModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeGallery(); });
 
-        function merchClick(name) { window.open(`https://wa.me/27123456789?text=${encodeURIComponent(`Hey Ghost, I'm interested in the "${name}". How can I order?`)}`, '_blank'); }
+        // ===== MERCH =====
+        function merchClick(name) {
+            const msg = encodeURIComponent(`Hey Ghost, I'm interested in the ${name}. How can I order?`);
+            window.open(`https://wa.me/27123456789?text=${msg}`, '_blank');
+        }
 
-        // ===== REVEAL =====
-        const revealObserver = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal-section').forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(25px)'; el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out'; revealObserver.observe(el); });
+        // ===== CONTACT FORM =====
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputs = this.querySelectorAll('input, select, textarea');
+            let name = '', email = '', type = '', message = '';
+            inputs.forEach((inp, i) => { if (i === 0) name = inp.value; if (i === 1) email = inp.value; if (i === 2) type = inp.value; if (i === 3) message = inp.value; });
+            const waMsg = encodeURIComponent(`*New Booking Request*\n\nName: ${name}\nEmail: ${email}\nEvent: ${type}\nMessage: ${message}`);
+            window.open(`https://wa.me/27123456789?text=${waMsg}`, '_blank');
+            const fm = document.getElementById('formMessage');
+            fm.className = 'text-center fluid-small py-2.5 rounded-xl bg-whatsapp/10 text-whatsapp';
+            fm.textContent = 'Opening WhatsApp...';
+            fm.classList.remove('hidden');
+            setTimeout(() => fm.classList.add('hidden'), 3000);
+        });
 
-        document.getElementById('contactForm').addEventListener('submit', e => { e.preventDefault(); const msg = document.getElementById('formMessage'); msg.classList.remove('hidden'); msg.className = 'text-center fluid-small py-2.5 rounded-xl bg-brand-orange/10 text-brand-orange border border-brand-orange/20'; msg.textContent = 'Message sent! Ghost will get back to you soon.'; setTimeout(() => msg.classList.add('hidden'), 4000); });
+        // ===== REVEAL ON SCROLL =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            revealObserver.observe(el);
+        });
 
-        window.addEventListener('resize', handleScroll);
+        // =====================================================================
+        // ★ SCROLL-DRIVEN VIDEO ENGINE
+        // ★ Maps scroll position → video.currentTime frame-by-frame
+        // ★ Uses "seek and wait" to avoid browser seek throttle (0.25s)
+        // =====================================================================
+
+        class ScrollVideo {
+            constructor({ section, video, loading, overlay, onProgress, onReady }) {
+                this.section = section;
+                this.video = video;
+                this.loadingEl = loading;
+                this.overlayEl = overlay;
+                this.onProgress = onProgress;
+                this.onReady = onReady;
+                this.duration = 0;
+                this.ready = false;
+                this.seeking = false;
+                this.lastSeekTime = -1;
+
+                // Wait for video metadata to get real duration
+                this.video.addEventListener('loadedmetadata', () => {
+                    this.duration = this.video.duration;
+                    this.ready = true;
+                    // Hide loading spinner
+                    if (this.loadingEl) this.loadingEl.classList.remove('visible');
+                    // Set first frame
+                    this.video.currentTime = 0;
+                    if (this.onReady) this.onReady(this.duration);
+                });
+
+                // Fallback: if video fails, hide spinner after 8s anyway
+                setTimeout(() => {
+                    if (!this.ready && this.loadingEl) this.loadingEl.classList.remove('visible');
+                }, 8000);
+            }
+
+            update() {
+                if (!this.ready || this.seeking) return;
+
+                const rect = this.section.getBoundingClientRect();
+                const scrollDistance = this.section.offsetHeight - window.innerHeight;
+
+                // How far through the scroll section are we? (0 → 1)
+                let progress = -rect.top / scrollDistance;
+                progress = Math.max(0, Math.min(1, progress));
+
+                // Map progress to video time
+                const targetTime = progress * this.duration;
+
+                // Only seek if we've moved to a new "frame" (skip duplicate seeks)
+                if (Math.abs(targetTime - this.lastSeekTime) > 0.01) {
+                    this.lastSeekTime = targetTime;
+                    this.seeking = true;
+                    this.video.currentTime = targetTime;
+
+                    // Wait for seek to finish before allowing next seek
+                    const onSeeked = () => {
+                        this.seeking = false;
+                        this.video.removeEventListener('seeked', onSeeked);
+                    };
+                    this.video.addEventListener('seeked', onSeeked);
+                }
+
+                // Overlay fade (for story transition section)
+                if (this.overlayEl) {
+                    // Fade overlay out during first 15% of scroll
+                    const overlayOpacity = Math.max(0, 1 - (progress / 0.15));
+                    this.overlayEl.style.opacity = overlayOpacity;
+                    // Fade video in during first 15% of scroll
+                    this.video.style.opacity = Math.min(1, progress / 0.15);
+                }
+
+                // Callback with progress
+                if (this.onProgress) this.onProgress(progress);
+            }
+        }
+
+        // --- Story Transition Video ---
+        const storyVideo = new ScrollVideo({
+            section: document.getElementById('storyTransition'),
+            video: document.getElementById('storyVideo'),
+            loading: document.getElementById('storyLoading'),
+            overlay: document.getElementById('storyOverlay'),
+            onReady: (dur) => {
+                // Update frame counter to match real duration @ 30fps
+                const totalFrames = Math.round(dur * 30);
+                document.getElementById('frameCounter').textContent = `000 / ${String(totalFrames).padStart(3, '0')}`;
+            },
+            onProgress: (progress) => {
+                // Update frame counter
+                if (storyVideo.duration) {
+                    const currentFrame = Math.round(progress * storyVideo.duration * 30);
+                    const totalFrames = Math.round(storyVideo.duration * 30);
+                    document.getElementById('frameCounter').textContent =
+                        `${String(currentFrame).padStart(3, '0')} / ${String(totalFrames).padStart(3, '0')}`;
+                }
+
+                // Scene text at different scroll points
+                const textEl = document.getElementById('sceneTextInner');
+                if (progress > 0.2 && progress < 0.5) {
+                    textEl.textContent = 'The Streets';
+                    textEl.style.color = `rgba(255,255,255,${Math.min(1, (progress - 0.2) / 0.05)})`;
+                } else if (progress > 0.5 && progress < 0.8) {
+                    textEl.textContent = 'The Machine';
+                    textEl.style.color = `rgba(255,255,255,${Math.min(1, (progress - 0.5) / 0.05)})`;
+                } else if (progress > 0.8) {
+                    textEl.textContent = 'The Ghost';
+                    textEl.style.color = `rgba(255,255,255,${Math.min(1, (progress - 0.8) / 0.05)})`;
+                } else {
+                    textEl.style.color = 'rgba(255,255,255,0)';
+                }
+            }
+        });
+
+        // --- Film Scroll Video ---
+        const filmScenes = [
+            { step: 'Scene 01', title: 'Ignition', end: 0.25 },
+            { step: 'Scene 02', title: 'Sideways', end: 0.5 },
+            { step: 'Scene 03', title: 'The Cloud', end: 0.75 },
+            { step: 'Scene 04', title: 'Legend', end: 1.01 }
+        ];
+
+        const filmVideo = new ScrollVideo({
+            section: document.getElementById('scrollFilm'),
+            video: document.getElementById('filmVideo'),
+            loading: document.getElementById('filmLoading'),
+            overlay: null,
+            onProgress: (progress) => {
+                // Update progress bar
+                document.getElementById('filmProgress').style.width = `${progress * 100}%`;
+
+                // Update scene labels
+                for (const scene of filmScenes) {
+                    if (progress <= scene.end) {
+                        document.getElementById('filmSceneStep').textContent = scene.step;
+                        document.getElementById('filmSceneTitle').textContent = scene.title;
+                        break;
+                    }
+                }
+            }
+        });
+
+        // --- Main animation loop ---
+        function onScrollFrame() {
+            storyVideo.update();
+            filmVideo.update();
+            requestAnimationFrame(onScrollFrame);
+        }
+        requestAnimationFrame(onScrollFrame);
+
+        // ===== HERO PARALLAX =====
+        window.addEventListener('scroll', () => {
+            const sy = window.scrollY;
+            document.getElementById('heroParallaxBg').style.transform = `translateY(${sy * 0.3}px)`;
+            document.getElementById('heroContent').style.transform = `translateY(${sy * 0.15}px)`;
+        }, { passive: true });
+
+        // ===== HERO CONTENT FADE =====
+        const heroSection = document.getElementById('hero');
+        const heroContentEl = document.getElementById('heroContent');
+        window.addEventListener('scroll', () => {
+            const rect = heroSection.getBoundingClientRect();
+            const fadeProgress = -rect.top / window.innerHeight;
+            heroContentEl.style.opacity = Math.max(0, 1 - fadeProgress * 1.5);
+        }, { passive: true });
+
     </script>
 </body>
 </html>
